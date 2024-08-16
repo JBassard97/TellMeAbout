@@ -1,8 +1,11 @@
+"use strict";
 const {
   CyanText,
   MagentaText,
   GreenText,
   RedText,
+  YellowText,
+  OrangeText,
   RainbowText,
 } = require("jbassard97nodecolors");
 
@@ -12,18 +15,28 @@ const {
 
 const TellMeAbout = (input: any, variableName: string) => {
   if (variableName && typeof variableName !== "string") {
-    return RedText("variableName parameter provided must be a string");
+    return RedText("variableName parameter provided must be a string\n");
   }
 
-  let inputName: string = CyanText(input.toString());
-  let dialogue: string = "";
+  let inputName;
+  if (typeof input === 'object' && input !== null) {
+    if (Array.isArray(input)) {
+      inputName = CyanText(`[${input.map(item => JSON.stringify(item)).join(', ')}]`);
+    } else {
+      inputName = CyanText(JSON.stringify(input, null, 2));
+    }
+  } else {
+    inputName = CyanText(input?.toString() ?? "undefined");
+  }
+
+  let dialogue = "";
 
   // Is it a variable or just a value?
   if (variableName) {
     variableName = MagentaText(variableName);
-    dialogue += `The variable ${variableName + "'s"} value is ${inputName}. `;
+    dialogue += `The variable ${variableName + "'s"} value is \n${inputName}.\n`;
   } else {
-    dialogue += `You want to know about the value ${inputName}. `;
+    dialogue += `You want to know about the ${MagentaText("value")}: \n${inputName}.\n`;
   }
 
   // Quick function to check if input is a palindrome (string or number)
@@ -35,31 +48,50 @@ const TellMeAbout = (input: any, variableName: string) => {
 
   // What's its type?
   const type = typeof input;
-  dialogue += `Its type is ${GreenText(type)}. `;
+  dialogue += `Its type is ${GreenText(type)}.\n`;
 
   switch (type) {
     case "undefined":
+      dialogue += "That's all there is to say!";
       break;
     case "string":
+      dialogue += `Its length is ${YellowText(input.length)} characters long.\n`;
       if (isPalindrome(input)) {
-        dialogue += `It is a ${RainbowText("palindrome")}! `;
+        dialogue += `It is a ${RainbowText("palindrome")}!\n`;
       }
       break;
     case "number":
       if (isPalindrome(input)) {
-        dialogue += `It is a ${RainbowText("palindrome")}! `;
+        dialogue += `It is also ${RainbowText("palindrome")}!\n`;
       }
       break;
     case "object":
-      const isArray = Array.isArray(input);
-      if (isArray) {
+      if (input === null) {
+        dialogue += "It's null.\n";
+      } else if (Array.isArray(input)) {
+        dialogue += `It is an ${OrangeText("array")}, containing ${YellowText(input.length)} items.\n`;
       } else {
+        const keys = Object.keys(input);
+        dialogue += `It's an object with ${YellowText(keys.length)} keys.\n`;
+        if (keys.length > 0) {
+          if (keys.length <= 5) {
+            dialogue += `Keys: ${OrangeText(keys.join(', '))}.\n`;
+          } else {
+            dialogue += `First 5 keys: ${keys.slice(0, 5).join(', ')}, ...\n`;
+          }
+        }
       }
       break;
     case "boolean":
+      dialogue += "That's all there is to say!\n";
+      break;
+    case "function":
+      dialogue += `It's a ${input.toString().startsWith('function') ? OrangeText('regular') : OrangeText('arrow')} ${OrangeText("function")}.\n`;
+      dialogue += `It expects ${YellowText(input.length)} parameter${input.length === 1 ? '' : 's'}.\n`;
       break;
   }
 
+  // Final vertical space add
   dialogue += "\n";
 
   return dialogue;

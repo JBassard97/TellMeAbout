@@ -1,3 +1,5 @@
 const { TellMeAbout } = require("./dist/tellMeAbout.js");
 
-console.log(TellMeAbout("racecar"));
+const testVariable = ["test", "array", "yes"];
+
+console.log(TellMeAbout(testVariable));
