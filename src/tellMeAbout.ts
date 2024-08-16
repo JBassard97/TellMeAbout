@@ -62,3 +62,5 @@ const TellMeAbout = (input: any, variableName: string) => {
 let hi = 42;
 
 console.log(TellMeAbout(hi, "hi"));
+
+module.exports = { TellMeAbout };
