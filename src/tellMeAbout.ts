@@ -26,6 +26,13 @@ const TellMeAbout = (input: any, variableName: string) => {
     dialogue += `You want to know about the value ${inputName}. `;
   }
 
+  // Quick function to check if input is a palindrome (string or number)
+  const isPalindrome = (input: any) => {
+    let stringInput = input.toString();
+    let reverse = stringInput.split("").reverse().join("");
+    return stringInput == reverse;
+  };
+
   // What's its type?
   const type = typeof input;
   dialogue += `Its type is ${GreenText(type)}. `;
@@ -34,15 +41,12 @@ const TellMeAbout = (input: any, variableName: string) => {
     case "undefined":
       break;
     case "string":
+      if (isPalindrome(input)) {
+        dialogue += `It is a ${RainbowText("palindrome")}! `;
+      }
       break;
     case "number":
-      const isPalindromeNumber = (input: number) => {
-        let stringInput = input.toString();
-        let reverse = stringInput.split("").reverse().join("");
-        return stringInput == reverse;
-      };
-
-      if (isPalindromeNumber(input)) {
+      if (isPalindrome(input)) {
         dialogue += `It is a ${RainbowText("palindrome")}! `;
       }
       break;
@@ -56,11 +60,9 @@ const TellMeAbout = (input: any, variableName: string) => {
       break;
   }
 
+  dialogue += "\n";
+
   return dialogue;
 };
-
-let hi = 42;
-
-console.log(TellMeAbout(hi, "hi"));
 
 module.exports = { TellMeAbout };
