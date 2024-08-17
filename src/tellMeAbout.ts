@@ -34,9 +34,9 @@ const TellMeAbout = (input: any, variableName: string) => {
   // Is it a variable or just a value?
   if (variableName) {
     variableName = MagentaText(variableName);
-    dialogue += `The variable ${variableName + "'s"} value is \n${inputName}.\n`;
+    dialogue += `The variable ${variableName + "'s"} value is: \n${inputName}\n`;
   } else {
-    dialogue += `You want to know about the ${MagentaText("value")}: \n${inputName}.\n`;
+    dialogue += `You want to know about the ${MagentaText("value")}: \n${inputName}\n`;
   }
 
   // Quick function to check if input is a palindrome (string or number)
@@ -61,8 +61,21 @@ const TellMeAbout = (input: any, variableName: string) => {
       }
       break;
     case "number":
-      if (isPalindrome(input)) {
-        dialogue += `It is also ${RainbowText("palindrome")}!\n`;
+      if (Number.isInteger(input)) { // Is an Integer
+        if (input === 0) { // Is Zero
+          dialogue += "It's zero!\n"
+        } else { // Not Zero
+          dialogue += `It's a ${YellowText(input > 0 ? "positive" : "negative")}, ${YellowText(input % 2 === 0 ? "even" : "odd")} integer.\n`
+          dialogue += `It is ${OrangeText(inputName.length)} digits long.\n`
+          if (input > 99) { // Could be Palindrome
+            if (isPalindrome(input)) {
+              dialogue += `It is also ${RainbowText("palindrome")}!\n`;
+            }
+          }
+        }
+      } else { // Not an Integer
+        let decimalPlaces = input.toString().split('.')[1].length;
+        dialogue += `It's a ${OrangeText("float")} with ${YellowText(decimalPlaces)} decimal place${decimalPlaces > 1 ? "s" : ""}.\n`;
       }
       break;
     case "object":
@@ -74,11 +87,7 @@ const TellMeAbout = (input: any, variableName: string) => {
         const keys = Object.keys(input);
         dialogue += `It's an object with ${YellowText(keys.length)} keys.\n`;
         if (keys.length > 0) {
-          if (keys.length <= 5) {
-            dialogue += `Keys: ${OrangeText(keys.join(', '))}.\n`;
-          } else {
-            dialogue += `First 5 keys: ${keys.slice(0, 5).join(', ')}, ...\n`;
-          }
+          dialogue += `Keys: ${OrangeText(keys.join(', '))}.\n`;
         }
       }
       break;

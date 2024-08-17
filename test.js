@@ -1,5 +1,5 @@
 const { TellMeAbout } = require("./dist/tellMeAbout.js");
 
-const testVariable = ["test", "array", "yes"];
+const testVariable = 43.23;
 
-console.log(TellMeAbout(testVariable));
+console.log(TellMeAbout(testVariable, "testVariable"));
