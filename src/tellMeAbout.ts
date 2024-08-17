@@ -1,4 +1,7 @@
 "use strict";
+
+import { randomBytes } from "crypto";
+
 const {
   CyanText,
   MagentaText,
@@ -28,7 +31,29 @@ const TellMeAbout = (input: any, variableName: string) => {
       inputName = CyanText(JSON.stringify(input, null, 2));
     }
   } else {
-    inputName = CyanText(input?.toString() ?? "undefined");
+    // Handle specific falsy values and ensure they are correctly stringified
+    switch (input) {
+      case "":
+        inputName = CyanText('""'); // Empty string
+        break;
+      case 0:
+        inputName = CyanText('0'); // Zero
+        break;
+      case false:
+        inputName = CyanText('false'); // Boolean false
+        break;
+      case null:
+        inputName = CyanText('null'); // Null
+        break;
+      case undefined:
+        inputName = CyanText('undefined'); // Undefined
+        break;
+      case NaN:
+        inputName = CyanText('NaN'); // Not a Number
+        break;
+      default:
+        inputName = CyanText(input?.toString() ?? "undefined");
+    }
   }
 
   let dialogue = "";
@@ -69,6 +94,8 @@ const TellMeAbout = (input: any, variableName: string) => {
     factors.sort((a, b) => a - b);
     return { factors, isPrime };
   }
+  // ! End Helper Functions
+
 
   // What's its type?
   const type = typeof input;
@@ -76,18 +103,30 @@ const TellMeAbout = (input: any, variableName: string) => {
 
   switch (type) {
     case "undefined":
-      dialogue += "That's all there is to say!";
       break;
     case "string":
       dialogue += `Its length is ${YellowText(input.length)} characters long.\n`;
-      if (isPalindrome(input)) {
-        dialogue += `It is a ${RainbowText("palindrome")}!\n`;
+      if (input.length > 2) {
+        if (isPalindrome(input)) {
+          dialogue += `It is a ${RainbowText("palindrome")}!\n`;
+        }
       }
+
       break;
     case "number":
+      if (isNaN(input)) {
+        dialogue += "It's " + RedText("NaN") + "(Not a Number).\n"
+        break;
+      }
+
+      if (!isFinite(input)) {
+        dialogue += `It's ${input > 0 ? RainbowText("Infinity") : RainbowText("-Infinity")}.\n`;
+        break;
+      }
+
       if (Number.isInteger(input)) { // Is an Integer
         if (input === 0) { // Is Zero
-          dialogue += "It's zero!\n"
+          break;
         } else { // Not Zero
           dialogue += `It's a ${YellowText(input > 0 ? "positive" : "negative")}, ${YellowText(input % 2 === 0 ? "even" : "odd")} integer.\n`
           const digitLength: number = Math.abs(input).toString().length
@@ -102,7 +141,7 @@ const TellMeAbout = (input: any, variableName: string) => {
               dialogue += `It's a ${RainbowText("perfect square")}: ${MagentaText(Math.sqrt(input) + " x " + Math.sqrt(input))}\n`
             }
 
-            const cubeRoot = (Math.round(Math.pow(input, 1 / 3)));
+            const cubeRoot: number = (Math.round(Math.pow(input, 1 / 3)));
             const isCube: boolean = cubeRoot ** 3 === input;
             if (isCube) {
               dialogue += `It's a ${RainbowText("perfect cube")}: ${MagentaText(cubeRoot + " x " + cubeRoot + " x " + cubeRoot)}\n`
@@ -121,25 +160,27 @@ const TellMeAbout = (input: any, variableName: string) => {
       break;
     case "object":
       if (input === null) {
-        dialogue += "It's null.\n";
+        dialogue += `${BlueText("null")} being an ${GreenText("object")} is a quirk of ${YellowText("JavaScript")}\n`;
       } else if (Array.isArray(input)) {
         dialogue += `It is an ${OrangeText("array")}, containing ${YellowText(input.length)} items.\n`;
       } else {
         const keys = Object.keys(input);
-        dialogue += `It's an object with ${YellowText(keys.length)} keys.\n`;
+        dialogue += `It contains ${YellowText(keys.length)} keys.\n`;
         if (keys.length > 0) {
           dialogue += `Keys: ${OrangeText(keys.join(', '))}.\n`;
         }
       }
       break;
     case "boolean":
-      dialogue += "That's all there is to say!\n";
       break;
     case "function":
       dialogue += `It's a ${input.toString().startsWith('function') ? OrangeText('regular') : OrangeText('arrow')} ${OrangeText("function")}.\n`;
       dialogue += `It expects ${YellowText(input.length)} parameter${input.length === 1 ? '' : 's'}.\n`;
       break;
   }
+
+  // Truthy or Falsy
+  dialogue += `Lastly, it is ${input ? GreenText("Truthy") : RedText("Falsy")}`
 
   // Final vertical space add
   dialogue += "\n";
