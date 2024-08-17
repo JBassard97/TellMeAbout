@@ -115,7 +115,7 @@ const TellMeAbout = (input: any, variableName: string) => {
       break;
     case "number":
       if (isNaN(input)) {
-        dialogue += "It's " + RedText("NaN") + "(Not a Number).\n"
+        dialogue += "It's " + RedText("NaN") + " (Not a Number).\n"
         break;
       }
 

@@ -1,9 +1,10 @@
 const { TellMeAbout } = require("./dist/tellMeAbout.js");
 
-let testVariable = {
-  testing1: "testing",
-  testing2: "testing",
-  testing3: "testing",
-};
+let testVariable = Symbol();
 
-console.log(TellMeAbout(''));
+// ! Edge Cases Tested: 
+// Infinity, -Infinity, null, "", '',
+// 0, Nan, false, undefined, [], {}, 
+// Nested Arrays, Nested Objects, Symbol()
+
+console.log(TellMeAbout(testVariable, "testVariable"));
