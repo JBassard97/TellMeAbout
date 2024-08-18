@@ -1,6 +1,5 @@
 "use strict";
 
-import { randomBytes } from "crypto";
 
 const {
   CyanText,
@@ -74,7 +73,7 @@ const TellMeAbout = (input: any, variableName: string) => {
     return stringInput == reverse;
   };
 
-  function getFactorsAndCheckPrime(num: number): { factors: number[], isPrime: boolean } {
+  function getFactorsAndCheckPrimeNumber(num: number): { factors: number[], isPrime: boolean } {
     const absNum = Math.abs(num);
     const factors: number[] = [];
     let isPrime = absNum > 1;
@@ -132,7 +131,7 @@ const TellMeAbout = (input: any, variableName: string) => {
           const digitLength: number = Math.abs(input).toString().length
           dialogue += `It's ${OrangeText(digitLength)} digit${digitLength > 1 ? "s" : ""} long.\n`
           // Is it Prime?
-          const { factors, isPrime } = getFactorsAndCheckPrime(input);
+          const { factors, isPrime } = getFactorsAndCheckPrimeNumber(input);
           dialogue += `${isPrime ? `It is a ${BlueText("prime")} number, with only the factors ${YellowText("1 ") + "and " + YellowText(input)}` : `Its factors are ${BlueText(factors)}`}.\n`;
           // Is it a Perfect Square or Perfect Cube?
           if (input > 0) {
@@ -157,6 +156,49 @@ const TellMeAbout = (input: any, variableName: string) => {
         let decimalPlaces = input.toString().split('.')[1].length;
         dialogue += `It's a ${OrangeText("float")} with ${YellowText(decimalPlaces)} decimal place${decimalPlaces > 1 ? "s" : ""}.\n`;
       }
+      break;
+    case "bigint":
+      const digitLength = input.toString().replace("-", "").length;
+      dialogue += `It's ${YellowText(digitLength)} digit${digitLength > 1 ? "s" : ""} long.\n`;
+      dialogue += `Its decimal representation is ${OrangeText(input.toLocaleString("en-US"))}\n`;
+      if (input === 0n) {
+        dialogue += `Though it's a BigInt, it's still ${BlueText("zero")}.\n`
+      } else {
+        dialogue += `It's a ${YellowText(input > 0n ? "positive" : "negative")}, ${YellowText(input % 2n == 0n ? "even" : "odd")} number.\n`
+      }
+
+      function getFactorsAndCheckPrimeBigint(num: bigint) {
+        // Convert num to absolute value to handle negative BigInts
+        num = num < 0n ? -num : num;
+
+        // Initialize factors array and prime flag
+        const factors = [];
+        let isPrime = true;
+
+        // Check divisibility and find factors
+        for (let i = 1n; i <= num / 2n; i++) {
+          if (num % i === 0n) {
+            factors.push(i);
+            if (i !== 1n && i !== num / i) {
+              isPrime = false;
+            }
+          }
+        }
+        factors.push(num); // Include the number itself as a factor
+
+        // Check if the number is prime
+        if (factors.length === 2) { // Only 1 and itself
+          isPrime = true;
+        } else {
+          isPrime = false;
+        }
+
+        return { factors, isPrime };
+      }
+
+      const { factors, isPrime } = getFactorsAndCheckPrimeBigint(input);
+
+      dialogue += `${isPrime ? `It is a ${BlueText("prime")} number, with only the factors ${YellowText("1 ") + "and " + YellowText(input)}` : `Its factors are ${BlueText(factors)}`}.\n`;
       break;
     case "object":
       if (input === null) {
