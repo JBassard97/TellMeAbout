@@ -167,38 +167,38 @@ const TellMeAbout = (input: any, variableName: string) => {
         dialogue += `It's a ${YellowText(input > 0n ? "positive" : "negative")}, ${YellowText(input % 2n == 0n ? "even" : "odd")} number.\n`
       }
 
-      function getFactorsAndCheckPrimeBigint(num: bigint) {
-        // Convert num to absolute value to handle negative BigInts
-        num = num < 0n ? -num : num;
+      // function getFactorsAndCheckPrimeBigint(num: bigint) {
+      //   // Convert num to absolute value to handle negative BigInts
+      //   num = num < 0n ? -num : num;
 
-        // Initialize factors array and prime flag
-        const factors = [];
-        let isPrime = true;
+      //   // Initialize factors array and prime flag
+      //   const factors = [];
+      //   let isPrime = true;
 
-        // Check divisibility and find factors
-        for (let i = 1n; i <= num / 2n; i++) {
-          if (num % i === 0n) {
-            factors.push(i);
-            if (i !== 1n && i !== num / i) {
-              isPrime = false;
-            }
-          }
-        }
-        factors.push(num); // Include the number itself as a factor
+      //   // Check divisibility and find factors
+      //   for (let i = 1n; i <= num / 2n; i++) {
+      //     if (num % i === 0n) {
+      //       factors.push(i);
+      //       if (i !== 1n && i !== num / i) {
+      //         isPrime = false;
+      //       }
+      //     }
+      //   }
+      //   factors.push(num); // Include the number itself as a factor
 
-        // Check if the number is prime
-        if (factors.length === 2) { // Only 1 and itself
-          isPrime = true;
-        } else {
-          isPrime = false;
-        }
+      //   // Check if the number is prime
+      //   if (factors.length === 2) { // Only 1 and itself
+      //     isPrime = true;
+      //   } else {
+      //     isPrime = false;
+      //   }
 
-        return { factors, isPrime };
-      }
+      //   return { factors, isPrime };
+      // }
 
-      const { factors, isPrime } = getFactorsAndCheckPrimeBigint(input);
+      // const { factors, isPrime } = getFactorsAndCheckPrimeBigint(input);
 
-      dialogue += `${isPrime ? `It is a ${BlueText("prime")} number, with only the factors ${YellowText("1 ") + "and " + YellowText(input)}` : `Its factors are ${BlueText(factors)}`}.\n`;
+      // dialogue += `${isPrime ? `It is a ${BlueText("prime")} number, with only the factors ${YellowText("1 ") + "and " + YellowText(input)}` : `Its factors are ${BlueText(factors)}`}.\n`;
       break;
     case "object":
       if (input === null) {

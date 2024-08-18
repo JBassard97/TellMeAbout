@@ -1,6 +1,6 @@
 const { TellMeAbout } = require("./dist/tellMeAbout.js");
 
-let testVariable = 25;
+let mystery = "hi";
 
 // ! Edge Cases Tested:
 // Infinity, -Infinity, null, "", '',
@@ -8,4 +8,4 @@ let testVariable = 25;
 // Nested Arrays, Nested Objects, Symbol()
 // "😊", "é", BigInt(9007199254740991)
 
-console.log(TellMeAbout(testVariable, "testVariable"));
+console.log(TellMeAbout(mystery, 69));
