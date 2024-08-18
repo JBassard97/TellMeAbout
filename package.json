@@ -1,7 +1,7 @@
 {
   "name": "tellmeabout",
   "version": "1.0.0",
-  "description": "",
+  "description": "A function that can take in any variable or value, and tell you everything about it",
   "main": "dist/tellMeAbout.js",
   "types": "dist/tellMeAbout.d.ts",
   "scripts": {
@@ -10,7 +10,7 @@
     "test": "node test.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "jbassard97",
   "license": "ISC",
   "files": [
     "dist",
